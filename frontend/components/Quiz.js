@@ -1,6 +1,14 @@
-import React from 'react'
+import React, { useEffect} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchQuiz, postAnswer, submitAnswer } from '../state/action-creators';
+import { connect } from "react-redux";
 
-export default function Quiz(props) {
+ function Quiz(props) {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchQuiz()) // Dispatch the fetchQuiz action when the component mounts
+  }, [dispatch]) 
+  const quiz = useSelector(state => state.quiz);
   return (
     <div id="wrapper">
       {
@@ -31,4 +39,12 @@ export default function Quiz(props) {
       }
     </div>
   )
+    }
+
+//   
+const mapstatetoprops = (state) => {
+  return {quiz: state.quiz,
+          id: state.submitAnswer
+  }
 }
+export default connect(mapstatetoprops, {fetchQuiz, postAnswer, submitAnswer})(Quiz)

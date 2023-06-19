@@ -1,15 +1,30 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import * as actionCreators from '../state/action-creators'
+import { useDispatch, useSelector } from 'react-redux'
+import { INPUT_CHANGE } from '../state/action-types'
 
 export function Form(props) {
 
-  const onChange = evt => {
+ 
+    const dispatch = useDispatch();
+    const formData = useSelector(state => state.form);
+    const isFormFilledOut = Object.values(formData).every(value => value.trim() !== '');
 
-  }
+    
+    const onChange = evt => {
+      const { id, value } = evt.target; 
+    
+      dispatch({
+        type: INPUT_CHANGE,
+        payload: { field: id, value: value }, 
+      });
+      }
+
 
   const onSubmit = evt => {
-
+    evt.preventDefault();
+    dispatch(actionCreators.submitForm(formData));
   }
 
   return (
@@ -18,7 +33,7 @@ export function Form(props) {
       <input maxLength={50} onChange={onChange} id="newQuestion" placeholder="Enter question" />
       <input maxLength={50} onChange={onChange} id="newTrueAnswer" placeholder="Enter true answer" />
       <input maxLength={50} onChange={onChange} id="newFalseAnswer" placeholder="Enter false answer" />
-      <button id="submitNewQuizBtn">Submit new quiz</button>
+      <button id="submitNewQuizBtn" disabled={!isFormFilledOut}>Submit new quiz</button>
     </form>
   )
 }
