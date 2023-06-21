@@ -1,30 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import * as actionCreators from '../state/action-creators'
-import { useDispatch, useSelector } from 'react-redux'
-import { INPUT_CHANGE } from '../state/action-types'
+import { inputChange, submitForm, resetForm } from '../state/action-creators'
 
 export function Form(props) {
-
- 
-    const dispatch = useDispatch();
-    const formData = useSelector(state => state.form);
-    const isFormFilledOut = Object.values(formData).every(value => value.trim() !== '');
-
-    
-    const onChange = evt => {
-      const { id, value } = evt.target; 
-    
-      dispatch({
-        type: INPUT_CHANGE,
-        payload: { field: id, value: value }, 
-      });
-      }
-
+  const { inputChange, submitForm, form, infoMessage } = props;
+  const onChange = evt => {
+    inputChange(evt.target.id, evt.target.value);
+    //console.log("formstate after input change:", form)
+  }
 
   const onSubmit = evt => {
     evt.preventDefault();
-    dispatch(actionCreators.submitForm(formData));
+   // console.log("Formstate:", form)
+    submitForm(form);
+  }
+  const allInputsFilled = form.newQuestion.trim().length > 1 && form.newTrueAnswer.trim().length > 1 && form.newFalseAnswer.trim().length > 1;
+  let messageDisplay;
+  if (infoMessage) {
+    messageDisplay = <p>{infoMessage}</p>;
   }
 
   return (
@@ -33,9 +27,18 @@ export function Form(props) {
       <input maxLength={50} onChange={onChange} id="newQuestion" placeholder="Enter question" />
       <input maxLength={50} onChange={onChange} id="newTrueAnswer" placeholder="Enter true answer" />
       <input maxLength={50} onChange={onChange} id="newFalseAnswer" placeholder="Enter false answer" />
-      <button id="submitNewQuizBtn" disabled={!isFormFilledOut}>Submit new quiz</button>
+      <button id="submitNewQuizBtn" disabled={!allInputsFilled}>Submit new quiz</button>
+      {messageDisplay}
     </form>
   )
 }
+const mapStateToProps = state => ({
+  form: state.form,
+  infoMessage: state.infoMessage
+});
 
-export default connect(st => st, actionCreators)(Form)
+const mapDispatchToProps = {
+  inputChange,
+  submitForm,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Form);

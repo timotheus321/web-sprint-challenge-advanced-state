@@ -5,7 +5,7 @@ import { MOVE_CLOCKWISE,
          SET_QUIZ_INTO_STATE,
          SET_SELECTED_ANSWER,
          SET_INFO_MESSAGE,
-        INPUT_CHANGE, RESET_FORM
+        INPUT_CHANGE, RESET_FORM, SUBMIT_FORM_SUCCESS
           } from './action-types'
 const initialWheelState = 0
 function wheel(state = initialWheelState, action) {
@@ -24,6 +24,10 @@ function quiz(state = initialQuizState, action) {
   switch(action.type) {
     case SET_QUIZ_INTO_STATE:
       return action.payload;
+    // case SUBMIT_FORM_SUCCESS:
+    //   return [...state, action.payload];
+    case 'ADD_QUIZ':
+      return [...state, action.payload];
     default:
       return state
   }
@@ -45,6 +49,8 @@ function infoMessage(state = initialMessageState, action) {
   switch(action.type){
     case SET_INFO_MESSAGE:
       return action.payload;
+      case SUBMIT_FORM_SUCCESS:
+      return 'Congrats: "' + action.payload.newQuestion + '?" is a great question!';
     default:
       return state;
   }
@@ -54,15 +60,19 @@ const initialFormState = {
   newQuestion: '',
   newTrueAnswer: '',
   newFalseAnswer: '',
+  isFormFilledOut: false,
 }
 function form(state = initialFormState, action) {
   switch(action.type){
     case INPUT_CHANGE:
+    
       return {
         ...state,
         [action.payload.name]: action.payload.value
+        
       };
     case RESET_FORM:
+
       return initialFormState;
     default:
       return state;

@@ -30,6 +30,7 @@ export function setQuiz(quiz) {
  }
 
 export function inputChange(name, value) {
+  //console.log(`inputChange called with name: ${name}, value: ${value}`);
   return {type: INPUT_CHANGE, payload: { name, value} };
  }
 
@@ -43,6 +44,7 @@ export function fetchQuiz() {
     dispatch(setQuiz(null));
     axios.get('http://localhost:9000/api/quiz/next')
     .then(response => {
+     // console.log(response.data); // Log the response data
       dispatch(setQuiz(response.data));
     })
     .catch(error => {
@@ -91,24 +93,26 @@ export function postQuiz(newQuiz) {
 export const submitForm = (formData) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post('https://your-quiz-api-endpoint.com/quizzes', formData);
+     
+      const response = await axios.post('http://localhost:9000/api/quiz/new', formData);
       
       dispatch({ type: SUBMIT_FORM_SUCCESS, payload: response.data });
       
       // Dispatch any other actions as needed
       
     } catch (error) {
+      console.log("error:", error)
       dispatch({ type: SUBMIT_FORM_FAILURE, error });
       // Handle the error properly
     }
   };
 };
 // ❗ On promise rejections, use log statements or breakpoints, and put an appropriate error message in state
-export function submitAnswer(quiz_id, answer) {
+export function submitAnswer(quiz_id, answer_id) {
   return function (dispatch) {
-    axios.post('http://localhost:9000/api/quiz/answer', { quiz_id, answer })
+    axios.post('http://localhost:9000/api/quiz/answer', { quiz_id, answer_id: answer_id })
     .then(response => {
-      dispatch(selectAnswer(null));  // Reset selected answer
+      //dispatch(selectAnswer(null));  // Reset selected answer
       dispatch(setMessage(response.data.message));
       dispatch(fetchQuiz());
     })
