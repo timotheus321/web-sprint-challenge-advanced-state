@@ -4,13 +4,13 @@ import { fetchQuiz, postAnswer, submitAnswer, selectAnswer } from '../state/acti
 import { connect } from "react-redux";
 
  function Quiz(props) {
+  const {  quiz, selectedAnswer, selectAnswer} = props;
   //const dispatch = useDispatch();
   useEffect(() => {
     if (!quiz) {
       props.fetchQuiz();
     }
   }, [props.fetchQuiz, quiz]) 
-  const {  quiz, selectedAnswer, selectAnswer} = props;
   
 
 // return (
