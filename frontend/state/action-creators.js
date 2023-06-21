@@ -93,15 +93,24 @@ export function postQuiz(newQuiz) {
 export const submitForm = (formData) => {
   return async (dispatch) => {
     try {
+     console.log(formData)
+     const formattedData = {
+      question_text: formData.newQuestion,
+      true_answer_text: formData.newTrueAnswer,
+      false_answer_text: formData.newFalseAnswer,
+    };
+      await axios.post('http://localhost:9000/api/quiz/new', formattedData).then((response) =>{
+      // console.log(response)
+      dispatch(setMessage(`Congrats: "${response.data.question}" is a great question!`));
+      dispatch(resetForm());
+      } )
+      //console.log(formData);
      
-      const response = await axios.post('http://localhost:9000/api/quiz/new', formData);
-      
-      dispatch({ type: SUBMIT_FORM_SUCCESS, payload: response.data });
       
       // Dispatch any other actions as needed
       
     } catch (error) {
-      console.log("error:", error)
+      //console.log("error:", error)
       dispatch({ type: SUBMIT_FORM_FAILURE, error });
       // Handle the error properly
     }

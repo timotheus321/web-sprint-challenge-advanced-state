@@ -6,9 +6,11 @@ import { connect } from "react-redux";
  function Quiz(props) {
   //const dispatch = useDispatch();
   useEffect(() => {
-    props.fetchQuiz(); // Dispatch the fetchQuiz action when the component mounts
-  }, [props.fetchQuiz]) 
-  const {  quiz, selectedAnswer, infoMessage} = props;
+    if (!quiz) {
+      props.fetchQuiz();
+    }
+  }, [props.fetchQuiz, quiz]) 
+  const {  quiz, selectedAnswer, selectAnswer} = props;
   
 
 // return (
@@ -42,10 +44,7 @@ import { connect } from "react-redux";
 // )
 return (
   <div id="wrapper">
-     {
-        // If infoMessage is not null, render the message
-        infoMessage && <h2>{infoMessage}</h2>
-      }
+    
       {
         // If quiz is not null, render the quiz, otherwise render "Loading next quiz..."
         quiz ? (
@@ -53,7 +52,7 @@ return (
           <h2>{quiz.question}</h2>
           <div id="quizAnswers">
             {quiz.answers.map((answer, index) => (
-              <div key={index} className={`answer ${selectedAnswer === answer.answer_id ? 'selected' : ''}`}>
+              <div key={index} className={`answer ${selectedAnswer === answer.answer_id ? 'selected' : ''}`}onClick={() => selectAnswer(quiz.answers[index].answer_id)}>
                 {answer.text}
                 <button onClick={() => props.selectAnswer(answer.answer_id)}>
                   {selectedAnswer === answer.answer_id ? 'SELECTED' : 'Select'}
@@ -76,6 +75,7 @@ const mapstatetoprops = (state) => {
           // id: state.submitAnswer
           selectedAnswer: state.selectedAnswer,
           infoMessage: state.infoMessage
+         
   }
 }
 const mapDispatchToProps = {

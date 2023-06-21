@@ -57,7 +57,10 @@ The endpoints needed for this project are the following:
   - A response to a proper request includes `200 OK` and feedback on the answer
 
 ❗ Test drive all these endpoints with [Postman](https://www.postman.com/downloads/) before starting with the project.
-
+{question_text: newQuestion,
+      true_answer_text: newTrueAnswer,
+      false_answer_text: newFalseAnswer,
+    }
 ## MVP
 
 In order to complete this project, you must fix the following modules:

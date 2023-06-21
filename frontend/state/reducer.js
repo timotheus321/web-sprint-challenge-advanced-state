@@ -5,7 +5,9 @@ import { MOVE_CLOCKWISE,
          SET_QUIZ_INTO_STATE,
          SET_SELECTED_ANSWER,
          SET_INFO_MESSAGE,
-        INPUT_CHANGE, RESET_FORM, SUBMIT_FORM_SUCCESS
+        INPUT_CHANGE, 
+        RESET_FORM,
+         SUBMIT_FORM_SUCCESS
           } from './action-types'
 const initialWheelState = 0
 function wheel(state = initialWheelState, action) {
@@ -24,10 +26,10 @@ function quiz(state = initialQuizState, action) {
   switch(action.type) {
     case SET_QUIZ_INTO_STATE:
       return action.payload;
-    // case SUBMIT_FORM_SUCCESS:
+     case SUBMIT_FORM_SUCCESS:
+       return [...state, action.payload];
+    // case 'ADD_QUIZ':
     //   return [...state, action.payload];
-    case 'ADD_QUIZ':
-      return [...state, action.payload];
     default:
       return state
   }
